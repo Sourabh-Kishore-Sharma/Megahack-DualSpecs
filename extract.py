@@ -8,6 +8,8 @@ import pandas as pd
 import os
 import re
 
+import transform
+
 def stmt_extract(file,cols):
     df=pd.DataFrame()
     data=[]
@@ -68,3 +70,4 @@ if __name__ == "__main__":
     print(df)
     out = str(choice)+".csv"
     df.to_csv(out,index=False)
+    transform.bank(out,choice)
