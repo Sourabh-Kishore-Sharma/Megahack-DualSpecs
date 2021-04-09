@@ -19,7 +19,6 @@ limit 6
 df_pay_area.set_index("Payment_Area")
 colors_list = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'lightgreen', 'pink']
 explode_list = [0.1, 0,0.1, 0,0.1, 0] # ratio for each continent with which to offset each wedge.
-
 plt.rcParams.update({'font.size': 13})
 
 df_pay_area['Total'].plot(kind='pie',
@@ -32,7 +31,6 @@ df_pay_area['Total'].plot(kind='pie',
                             colors=colors_list,  # add custom colors
                             explode=explode_list # 'explode' lowest 3 payment types
                             )
-
 # scale the title up by 12% to match pctdistance
 plt.title('Distribution by Payment Area', y=1.05)
 plt.axis('equal')
@@ -55,7 +53,7 @@ df_from_debit.set_index("From",inplace=True)
 df_from_debit.plot(kind='bar')
 
 plt.rcParams.update({'font.size': 17})
-plt.ylabel("Total Amount")
+plt.ylabel("Total Amount Debited")
 plt.xlabel("Entity")
 plt.savefig("Debit.png",bbox_inches = 'tight')
 
@@ -63,17 +61,37 @@ plt.savefig("Debit.png",bbox_inches = 'tight')
 
 #Bar graph for Top 6 Credits
 df_from_credit = sql("""
-SELECT `From`,SUM(`Credit`) as Total
+SELECT `Class`,SUM(`Credit`) as Total
 FROM df
-group by `From`
+group by `Class`
 order by Total desc
 limit 6
 """)
 
-df_from_credit.set_index("From",inplace=True)
+df_from_credit.set_index("Class",inplace=True)
 df_from_credit.plot(kind='bar')
 
 plt.rcParams.update({'font.size': 17})
-plt.ylabel("Total Amount")
+plt.ylabel("Total Amount Credited")
 plt.xlabel("Entity")
 plt.savefig("Credit.png",bbox_inches = 'tight')
+
+
+
+#Bar graph for each month expenses
+df_month = sql("""
+select substr(`Transaction_Date`,4,6) as Month,sum(`Debit`) as Debit,sum(`Credit`) as Credit
+from df
+group by Month
+order by `Transaction_Date`
+limit 15
+""")
+df_month.set_index("Month",inplace=True)
+df_month.plot(kind='bar')
+
+plt.rcParams.update({'font.size': 17})
+plt.rcParams["figure.figsize"] = (10,10)
+plt.ylabel("Total Amount")
+plt.xlabel("Entity")
+
+plt.savefig("Expenses by Month.png",bbox_inches = 'tight')
