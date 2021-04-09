@@ -63,7 +63,7 @@ if __name__ == "__main__":
     else:
         pwd = input("Password: ")
         file = rm_pwd(pdf,pwd)
-        df = stmt_extract(pdf,cols)
+        df = stmt_extract(file,cols)
 
     print(df)
     out = str(choice)+".csv"
