@@ -26,18 +26,18 @@ def yes_bank(file,name):
     df = pd.read_csv(file)
     description = df["Description"]
 
-    df["Payment_Area"] = None
+    df["Payment_Area"] = "Others"
     for i,des in enumerate(df["Description"]):
         for pattern in regex:
             if bool(re.search(pattern,des,re.IGNORECASE)):
                 df.at[i,"Payment_Area"] = pattern
 
-    df["Payment_Type"] = None
+    df["Payment_Type"] = "Others"
     for i,des in enumerate(df["Description"]):
         type = des.split("/")[0]
         df.at[i,"Payment_Type"] = type
 
-    df["From"] = None
+    df["From"] = "Others"
     for i,des in enumerate(df["Description"]):
         try:
             sender = des.split("/")[2].split(":")[1]
@@ -45,7 +45,7 @@ def yes_bank(file,name):
         except:
             continue
 
-    df["To"] = None
+    df["To"] = "Others"
     for i,des in enumerate(df["Description"]):
         try:
             receiver = des.split("To:")[1].split("/")[0]
@@ -73,7 +73,49 @@ def yes_bank(file,name):
     df.to_csv("yes.csv",index=False)
 
 def icici_bank(file,name):
-    pass
+    df = pd.read_csv(file)
+    description = df["Description"]
+
+    df["Payment_Area"] = "Others"
+    for i,des in enumerate(df["Description"]):
+        for pattern in regex:
+            if bool(re.search(pattern,des,re.IGNORECASE)):
+                df.at[i,"Payment_Area"] = pattern
+
+    df["Payment_Type"] = "Others"
+    for i,des in enumerate(df["Description"]):
+        type = des.split("/")[0]
+        df.at[i,"Payment_Type"] = type
+
+    df["To"] = "Others"
+    df["Remarks"] = None
+
+
+    for i,des in enumerate(df["Description"]):
+        info = des.split("/")
+        if len(info) == 5:
+            df.at[i,"Payment_Type"] = info[0]
+            df.at[i,"Remarks"] = info[2]
+            df.at[i,"To"] = info[3]
+
+    df["Class"] = "Others"
+
+    for i,des in enumerate(df["Payment_Area"]):
+        if des in food:
+            df.at[i,"Class"] = "Food"
+        if des in UPI:
+            df.at[i,"Class"] = "UPI Payment"
+        if des in travel_accommodate:
+            df.at[i,"Class"] = "Travel/Accommodations"
+        if des in bill:
+            df.at[i,"Class"] = "Bill"
+        if des in entertainment:
+            df.at[i,"Class"] = "Entertainment"
+        if des in salary:
+            df.at[i,"Class"] = "Salary"
+
+    df = df.drop(["Value_Date","Cheque_Number","Description"],axis=1)
+    df.to_csv("icici.csv",index=False)
 
 def bank(file,name):
     if name == "yes":
