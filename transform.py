@@ -71,6 +71,7 @@ def yes_bank(file,name):
 
     df = df.drop(["Value_Date","Cheque_Number","Description"],axis=1)
     df.to_csv("yes.csv",index=False)
+    print("CSV file was tranformed/classified successfully!!")
 
 def icici_bank(file,name):
     df = pd.read_csv(file)

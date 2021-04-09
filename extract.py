@@ -67,7 +67,8 @@ if __name__ == "__main__":
         file = rm_pwd(pdf,pwd)
         df = stmt_extract(file,cols)
 
-    print(df)
+    #print(df)
     out = str(choice)+".csv"
     df.to_csv(out,index=False)
+    print("Bank statements was successfully extracted!!")
     transform.bank(out,choice)

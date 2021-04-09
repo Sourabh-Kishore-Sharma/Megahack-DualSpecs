@@ -6,6 +6,8 @@ from pandasql import sqldf
 sql=lambda q: sqldf(q,globals())
 import re
 
+from PIL import Image
+
 #Pie Chart Visualization of Payment Area
 df = pd.read_csv("yes.csv")
 df_pay_area = sql("""
@@ -16,7 +18,7 @@ order by Total desc
 limit 6
 """)
 
-df_pay_area.set_index("Payment_Area")
+df_pay_area.set_index("Payment_Area",inplace=True)
 colors_list = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'lightgreen', 'pink']
 explode_list = [0.1, 0,0.1, 0,0.1, 0] # ratio for each continent with which to offset each wedge.
 plt.rcParams.update({'font.size': 13})
@@ -37,6 +39,10 @@ plt.axis('equal')
 # add legend
 plt.legend(labels=df_pay_area.index, loc='upper left')
 plt.savefig("pay_area.png")
+print("1/4 Analysis Done!!")
+image1 = Image.open("pay_area.png")
+im1 = image1.convert("RGB")
+plt.close()
 
 
 
@@ -56,6 +62,10 @@ plt.rcParams.update({'font.size': 17})
 plt.ylabel("Total Amount Debited")
 plt.xlabel("Entity")
 plt.savefig("Debit.png",bbox_inches = 'tight')
+print("2/4 Analysis Done!!")
+image2 = Image.open("Debit.png")
+im2 = image2.convert("RGB")
+plt.close()
 
 
 
@@ -75,6 +85,10 @@ plt.rcParams.update({'font.size': 17})
 plt.ylabel("Total Amount Credited")
 plt.xlabel("Entity")
 plt.savefig("Credit.png",bbox_inches = 'tight')
+print("3/4 Analysis Done!!")
+image3 = Image.open("Credit.png")
+im3 = image3.convert("RGB")
+plt.close()
 
 
 
@@ -95,3 +109,11 @@ plt.ylabel("Total Amount")
 plt.xlabel("Entity")
 
 plt.savefig("Expenses by Month.png",bbox_inches = 'tight')
+print("4/4 Analysis Done!!")
+image4 = Image.open("Expenses by Month.png")
+im4 = image4.convert("RGB")
+plt.close()
+
+img_list = [im2,im3,im4]
+im1.save("Analysis.pdf",save_all=True, append_images=img_list)
+print("Visualization was done successfully!!")
