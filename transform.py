@@ -72,7 +72,6 @@ def yes_bank(file,name):
 
     df = df.drop(["Value_Date","Cheque_Number","Description"],axis=1)
     df["Transaction_Date"] = df["Transaction_Date"].apply(lambda x: datetime.datetime.strptime(x,"%d %b %Y").strftime("%d/%m/%Y"))
-    print(df["Transaction_Date"])
     df.to_csv("yes.csv",index=False)
     print("CSV file was tranformed/classified successfully!!")
 
