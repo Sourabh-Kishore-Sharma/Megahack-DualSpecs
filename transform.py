@@ -117,7 +117,7 @@ def icici_bank(file,name):
         if des in salary:
             df.at[i,"Class"] = "Salary"
 
-    df = df.drop(["Value_Date","Cheque_Number","Description"],axis=1)
+    df = df.drop(["SrNo.","Value_Date","Cheque_Number","Description"],axis=1)
     df.to_csv("icici.csv",index=False)
 
 def bank(file,name):
